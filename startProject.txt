@@ -1,0 +1,6 @@
+terminal 1 :- python3 api_server.py
+
+terminal 2 :- cd ~/Desktop/ProjectsFullStack/FinalProject/patientreadmission
+./mvnw spring-boot:run
+
+On browser :- http://localhost:8080/patient/form

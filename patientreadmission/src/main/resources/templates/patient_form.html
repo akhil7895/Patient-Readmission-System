@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🏥 Patient Readmission Predictor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .header-box {
+            background: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+            animation: fadeInDown 1s ease;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        form {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin-bottom: 30px;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        span {
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .btn {
+            margin-top: 25px;
+            padding: 12px 25px;
+            font-size: 18px;
+            background: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #388e3c;
+            transform: scale(1.03);
+        }
+
+        .result-animated, .loading-spinner {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            animation: fadeInZoom 1s ease forwards;
+            opacity: 0; /* Start hidden */
+            width: 400px;
+        }
+
+        @keyframes fadeInZoom {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success {
+            color: #2e7d32;
+            background: #e8f5e9;
+            border: 2px solid #2e7d32;
+        }
+
+        .danger {
+            color: #c62828;
+            background: #ffebee;
+            border: 2px solid #c62828;
+        }
+
+        .loading-spinner {
+            color: #1565c0;
+            background: #e3f2fd;
+            border: 2px dashed #1565c0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-box">
+        <h1>🏥 Patient Readmission Prediction</h1>
+    </div>
+
+    <form id="predictForm">
+        
+        <label for="age">👶👴 Age:</label>
+        <input type="range" id="age" name="age" min="0" max="100" value="50" required oninput="updateValue('age')">
+        <span id="ageValue">50</span>
+
+        <label for="num_procedures">🔬 Number of Procedures:</label>
+        <input type="range" id="num_procedures" name="num_procedures" min="0" max="10" value="0" required oninput="updateValue('num_procedures')">
+        <span id="num_proceduresValue">0</span>
+
+        <label for="num_medications">💊 Number of Medications:</label>
+        <input type="range" id="num_medications" name="num_medications" min="0" max="50" value="0" required oninput="updateValue('num_medications')">
+        <span id="num_medicationsValue">0</span>
+
+        <label for="time_in_hospital">🏥 Time in Hospital (days):</label>
+        <input type="range" id="time_in_hospital" name="time_in_hospital" min="1" max="30" value="1" required oninput="updateValue('time_in_hospital')">
+        <span id="time_in_hospitalValue">1</span>
+
+        <button class="btn" type="button" onclick="submitForm()">🔵 Predict Risk</button>
+
+    </form>
+
+    <!-- Loading spinner (hidden initially) -->
+    <div id="loading" class="loading-spinner" style="display: none;">
+        ⏳ Predicting risk, please wait...
+    </div>
+
+    <script>
+        function updateValue(id) {
+            var slider = document.getElementById(id);
+            var output = document.getElementById(id + "Value");
+            output.innerHTML = slider.value;
+        }
+
+        function submitForm() {
+            // Hide the form
+            document.getElementById('predictForm').style.display = 'none';
+
+            // Show the loading spinner
+            document.getElementById('loading').style.display = 'block';
+
+            // Prepare form data
+            const formData = new FormData(document.getElementById('predictForm'));
+
+            // Wait 3 seconds before submitting
+            setTimeout(function() {
+                // Create a fake form to POST
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/patient/predict';
+
+                for (let [key, value] of formData.entries()) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    form.appendChild(input);
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+            }, 3000); // 3 seconds
+        }
+    </script>
+
+</body>
+</html>

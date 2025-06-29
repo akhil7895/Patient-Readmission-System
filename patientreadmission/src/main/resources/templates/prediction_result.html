@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Result</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .result-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            animation: popIn 1.2s ease forwards, bounce 2s infinite;
+            opacity: 0;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            animation: textFadeIn 2s ease forwards;
+        }
+
+        .success {
+            color: #2e7d32;
+            background: #e8f5e9;
+            border: 3px solid #2e7d32;
+        }
+
+        .danger {
+            color: #c62828;
+            background: #ffebee;
+            border: 3px solid #c62828;
+        }
+
+        .home-btn {
+            margin-top: 30px;
+            padding: 12px 25px;
+            font-size: 18px;
+            background: #3498db;
+            border: none;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .home-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes textFadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="result-box" th:classappend="${prediction == 'Readmitted' ? 'danger' : 'success'}">
+        <h1>🎯 Result: <span th:text="${prediction}">Loading...</span></h1>
+        <!-- <a href="/" class="home-btn">🔙 Predict Again</a> -->
+        <!-- <a href="/" class="home-btn">🔙 Predict Again</a> -->
+        <a href="/patient/form" class="btn btn-primary">🔙 Predict Again</a>
+
+
+    </div>
+
+</body>
+</html>
